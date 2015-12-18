@@ -1,0 +1,13 @@
+Package: mtmisc
+Title: MT Miscellaneous Functions
+Version: 0.0.0.9000
+Authors@R: person("Mickael", "Temporão", email = "mickael.temporao.1@ulaval.ca", role = c("aut", "cre"))
+Description: Miscellaneous set of functions used in my coding.
+Depends: R (>= 3.2.3)
+License: GPL-2
+Year: 2015
+Copyright: Mickael Temporão
+LazyData: true
+Imports:
+    dplyr,
+    tidyr 
