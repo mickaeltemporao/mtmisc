@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Fri Dec 18 17:18:37 2015
+# Last Modified : Thu Dec 24 13:51:01 2015
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -61,7 +61,7 @@ getRri <- function (data, varname) {
 
 getRatio <- function(data, varname, ...){
   ratio <- function(values, ...){
-    (values)/(max(values, ...))
+    (values)/(max(values, na.rm=T))
   }
   data2 <- tbl_df(data %>% dplyr::select(starts_with(varname)))
   for (i in 1:nrow(data2)) {
@@ -70,6 +70,22 @@ getRatio <- function(data, varname, ...){
   colnames(data2) <- c(paste0(varname, 'RatioParty', 1:dim(data2)[2]))
   data <- dplyr::bind_cols(data, data2)
   return(data)
+}
+
+getRelativeIndex <- function (data) {
+  percent <- function (data, ...) {
+    (data)/(sum(data,na.rm=T))
+  }
+  ratio <- function(values, ...){
+    (values)/(max(values, na.rm=T))
+  }
+  data <- percent(data)
+  data <- ratio(data)
+  nParties <- length(data)
+  pWinner <- getRanks(data)
+  relativeIndex <- data[1:nParties] - data[pWinner]
+  relativeIndex[pWinner] <- data[pWinner] - sort(data, decreasing = TRUE)[2]
+  return(relativeIndex)
 }
 
 simpleLowercase<- function(text) {
