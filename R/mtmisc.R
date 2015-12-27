@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Thu Dec 24 13:51:01 2015
+# Last Modified : Sat Dec 26 20:41:42 2015
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -33,9 +33,63 @@ testSample <- function (data,by) {
 }
 
 getRanks <- function(x){
-  ranks <- rank(x, na.last=FALSE, ties.method = 'random' )
+  ranks <- rank(x, na.last='keep', ties.method = 'random' )
   winner <- which(ranks == max(ranks, na.rm=TRUE))
   return(winner)
+}
+
+#getRanks <- function(x){
+#  ranks <- rank(x, na.last=FALSE, ties.method = 'random' )
+#  winner <- which(ranks == max(ranks, na.rm=TRUE))
+#  return(winner)
+#}
+
+#getBinary <- function (data, varname, ...) {
+#  require(dplyr)
+#  df <- data %>% dplyr::select(starts_with(varname))
+#  for (i in 1:nrow(df)) {
+#  df[i,] <- rank(df[i,], na.last='keep', ties.method = 'random' )
+#  df[i,] <- ifelse(df[i,] %in% max(df[i,],na.rm=TRUE), 1, 0)
+#  print(paste0(round(i/nrow(df)*100,2),' % Completed'))
+#  }
+#  colnames(df) <- c(paste0(varname, 'BinaryParty', 1:dim(df)[2]))
+#  data <- dplyr::bind_cols(data, df)
+#  return(data)
+#}
+
+getBinary <- function (df) {
+  df <- rank(df, na.last='keep', ties.method = 'random' )
+  df <- ifelse(df %in% max(df,na.rm=TRUE), 1, ifelse(is.na(df), NA, 0))
+  return(df)
+}
+
+Test <- dplyr::select(Micro, starts_with('rkPrWinRiding'))
+Test <- t(apply(Test,1, getBinary))
+
+getAbsolute <- function (data, varname, ...) {
+  require(dplyr)
+  df <- data %>% dplyr::select(starts_with(varname))
+  for (i in 1:nrow(df)) {
+  df[i,] <- rank(df[i,], na.last='keep', ties.method = 'random' )
+  df[i,] <- ifelse(df[i,] %in% max(df[i,],na.rm=TRUE), 1, 0)
+  print(paste0(i/nrow(df)*100,' % Completed'))
+  }
+  colnames(df) <- c(paste0(varname, 'AbsoluteParty', 1:dim(df)[2]))
+  data <- dplyr::bind_cols(data, df)
+  return(data)
+}
+
+getRci <- function (data, varname, ...) {
+  df <- data %>% dplyr::select(starts_with(varname))
+  for (i in 1:nrow(data)) {
+    nParties <- length(df[i,])
+    pWinner <- getRanks(df[i,])
+    df[i,] <- df[i,c(1:nParties)] - df[[i,pWinner]]
+    df[i,pWinner] <- df[i,pWinner] - sort(df[i,], decreasing = TRUE)[2]
+  }
+  colnames(df) <- c(paste0(varname, 'RciParty', 1:dim(df)[2]))
+  data <- dplyr::bind_cols(data, df)
+  return(data)
 }
 
 # TODO: Rename function to something like relativeIndex
@@ -72,20 +126,24 @@ getRatio <- function(data, varname, ...){
   return(data)
 }
 
-getRelativeIndex <- function (data) {
+getRelativeIndex <- function (data, varname, ...) {
   percent <- function (data, ...) {
     (data)/(sum(data,na.rm=T))
   }
   ratio <- function(values, ...){
     (values)/(max(values, na.rm=T))
   }
-  data <- percent(data)
-  data <- ratio(data)
-  nParties <- length(data)
-  pWinner <- getRanks(data)
-  relativeIndex <- data[1:nParties] - data[pWinner]
-  relativeIndex[pWinner] <- data[pWinner] - sort(data, decreasing = TRUE)[2]
-  return(relativeIndex)
+  data2 <- data %>% dplyr::select(starts_with(varname))
+  for (i in 1:nrow(data)) {
+    data2[i,] <- ratio(percent(data2[i,]))
+    nParties <- length(data2[i,])
+    pWinner <- getRanks(data2[i,])
+    data2[i,] <- data2[i,c(1:nParties)] - data2[[i,pWinner]]
+    data2[i,pWinner] <- data2[i,pWinner] - sort(data2[i,], decreasing = TRUE)[2]
+  }
+  colnames(data2) <- c(paste0(varname, 'RelativeParty', 1:dim(data2)[2]))
+  data <- dplyr::bind_cols(data, data2)
+  return(data)
 }
 
 simpleLowercase<- function(text) {
