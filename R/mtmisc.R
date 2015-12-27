@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Sat Dec 26 20:41:42 2015
+# Last Modified : Sun Dec 27 12:21:18 2015
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -57,14 +57,35 @@ getRanks <- function(x){
 #  return(data)
 #}
 
-getBinary <- function (df) {
-  df <- rank(df, na.last='keep', ties.method = 'random' )
-  df <- ifelse(df %in% max(df,na.rm=TRUE), 1, ifelse(is.na(df), NA, 0))
-  return(df)
+apply_pb <- function(X, MARGIN, FUN, ...)
+{
+  env <- environment()
+  pb_Total <- sum(dim(X)[MARGIN])
+  counter <- 0
+  pb <- txtProgressBar(min = 0, max = pb_Total,
+                       style = 3)
+  wrapper <- function(...)
+  {
+    curVal <- get("counter", envir = env)
+    assign("counter", curVal +1 ,envir= env)
+    setTxtProgressBar(get("pb", envir= env),
+                           curVal +1)
+    FUN(...)
+  }
+  res <- apply(X, MARGIN, wrapper, ...)
+  close(pb)
+  res
 }
 
-Test <- dplyr::select(Micro, starts_with('rkPrWinRiding'))
-Test <- t(apply(Test,1, getBinary))
+getBinary <- function (df, varname) {
+  FUN <- function (df) {
+    df <- rank(df, na.last='keep', ties.method = 'random' )
+    df <- ifelse(df %in% max(df,na.rm=TRUE), 1, ifelse(is.na(df), NA, 0))
+    return(df)
+  }
+data <- dplyr::select(df, starts_with(varname))
+data <- t(apply_pb(data,1, getBinary))
+}
 
 getAbsolute <- function (data, varname, ...) {
   require(dplyr)
