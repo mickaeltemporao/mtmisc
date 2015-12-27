@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Sun Dec 27 12:28:46 2015
+# Last Modified : Sun Dec 27 12:48:15 2015
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -77,14 +77,18 @@ apply_pb <- function(X, MARGIN, FUN, ...)
   res
 }
 
-getBinary <- function (df, varname) {
-  FUN <- function (df) {
-    df <- rank(df, na.last='keep', ties.method = 'random' )
-    df <- ifelse(df %in% max(df,na.rm=TRUE), 1, ifelse(is.na(df), NA, 0))
-    return(df)
+getBinary <- function (data, varname) {
+  FUN <- function (data) {
+    data <- rank(data, na.last='keep', ties.method = 'random' )
+    data <- ifelse(data %in% max(data,na.rm=TRUE), 1, ifelse(is.na(data), NA, 0))
+    return(data)
   }
-  data <- dplyr::select(df, starts_with(varname))
-  data <- t(apply_pb(data,1, FUN))
+  df <- dplyr::select(data, starts_with(varname))
+  df <- t(apply_pb(df,1, FUN))
+  df <- as.data.frame(df)
+  colnames(df) <- c(paste0(varname, 'BinaryParty', 1:dim(df)[2]))
+  data <- dplyr::bind_cols(data, df)
+  return(data)
 }
 
 getAbsolute <- function (data, varname, ...) {
