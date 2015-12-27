@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Sun Dec 27 13:49:15 2015
+# Last Modified : Sun Dec 27 14:19:19 2015
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -87,23 +87,25 @@ getBinary <- function (data, varname) {
   df <- t(apply_pb(df,1, FUN))
   df <- as.data.frame(df)
   colnames(df) <- c(paste0(varname, 'BinaryParty', 1:dim(df)[2]))
-  data <- dplyr::bind_cols(data, df)
-  return(data)
+  #data <- dplyr::bind_cols(data, df) # remove auto append to initial DF
+  return(df)
 }
 
 getRci <- function (data, varname) {
+data <- head(Micro)
+varname <- 'rkPrToVote'
   FUN <- function (data) {
-    data <- c(43,5,3,2)
     win <- getRanks(data)
     data <- data - data[win]
     data[win] <- data[win] - sort(data, decreasing = TRUE)[2]
+    return(data)
   }
   df <- dplyr::select(data, starts_with(varname))
   df <- t(apply_pb(df,1, FUN))
   df <- as.data.frame(df)
   colnames(df) <- c(paste0(varname, 'RciParty', 1:dim(df)[2]))
-  data <- dplyr::bind_cols(data, df)
-  return(data)
+  #data <- dplyr::bind_cols(data, df) # remove auto append to initial DF
+  return(df)
 }
 
 # TODO: Rename function to something like relativeIndex
