@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Sun Dec 27 12:48:15 2015
+# Last Modified : Sun Dec 27 13:49:15 2015
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -91,27 +91,16 @@ getBinary <- function (data, varname) {
   return(data)
 }
 
-getAbsolute <- function (data, varname, ...) {
-  require(dplyr)
-  df <- data %>% dplyr::select(starts_with(varname))
-  for (i in 1:nrow(df)) {
-  df[i,] <- rank(df[i,], na.last='keep', ties.method = 'random' )
-  df[i,] <- ifelse(df[i,] %in% max(df[i,],na.rm=TRUE), 1, 0)
-  print(paste0(i/nrow(df)*100,' % Completed'))
+getRci <- function (data, varname) {
+  FUN <- function (data) {
+    data <- c(43,5,3,2)
+    win <- getRanks(data)
+    data <- data - data[win]
+    data[win] <- data[win] - sort(data, decreasing = TRUE)[2]
   }
-  colnames(df) <- c(paste0(varname, 'AbsoluteParty', 1:dim(df)[2]))
-  data <- dplyr::bind_cols(data, df)
-  return(data)
-}
-
-getRci <- function (data, varname, ...) {
-  df <- data %>% dplyr::select(starts_with(varname))
-  for (i in 1:nrow(data)) {
-    nParties <- length(df[i,])
-    pWinner <- getRanks(df[i,])
-    df[i,] <- df[i,c(1:nParties)] - df[[i,pWinner]]
-    df[i,pWinner] <- df[i,pWinner] - sort(df[i,], decreasing = TRUE)[2]
-  }
+  df <- dplyr::select(data, starts_with(varname))
+  df <- t(apply_pb(df,1, FUN))
+  df <- as.data.frame(df)
   colnames(df) <- c(paste0(varname, 'RciParty', 1:dim(df)[2]))
   data <- dplyr::bind_cols(data, df)
   return(data)
