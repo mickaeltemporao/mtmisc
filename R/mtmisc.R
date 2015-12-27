@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Sun Dec 27 14:19:19 2015
+# Last Modified : Sun Dec 27 14:29:25 2015
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -92,7 +92,6 @@ getBinary <- function (data, varname) {
 }
 
 getRci <- function (data, varname) {
-data <- head(Micro)
 varname <- 'rkPrToVote'
   FUN <- function (data) {
     win <- getRanks(data)
