@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Mon Dec 28 10:31:55 2015
+# Last Modified : Mon Dec 28 11:35:53 2015
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -106,7 +106,6 @@ getRci <- function (data, varname) {
   return(df)
 }
 
-# TODO: Rename function to something like relativeIndex
 getWinner <- function (data, varname) {
   winner <- NA
   winnerValue <- NA
