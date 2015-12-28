@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Mon Dec 28 09:51:15 2015
+# Last Modified : Mon Dec 28 10:31:55 2015
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -122,7 +122,7 @@ getWinner <- function (data, varname) {
     certainty[i] <- ifelse(sum(vars[i,], na.rm=TRUE)==0, NA, winnerValue[i] - secondValue[i])
   }
   df <- data.frame(winner)
-  colnames(df) <- c(paste0(varname,'Winner'))
+  colnames(df) <- c(paste0('winner.', varname))
   data <- dplyr::bind_cols(data, df)
   return(data)
 }
