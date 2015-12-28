@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Sun Dec 27 14:42:21 2015
+# Last Modified : Sun Dec 27 22:14:12 2015
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -104,6 +104,27 @@ getRci <- function (data, varname) {
   colnames(df) <- c(paste0(varname, 'RciParty', 1:dim(df)[2]))
   #data <- dplyr::bind_cols(data, df) # remove auto append to initial DF
   return(df)
+}
+
+# TODO: Rename function to something like relativeIndex
+getWinner <- function (data, varname) {
+  winner <- NA
+  winnerValue <- NA
+  secondValue <- NA
+  certainty <- NA
+  n <- NA
+  vars <- data %>% dplyr::select(starts_with(varname))
+  for (i in 1:nrow(data)) {
+    winner[i] <- ifelse(sum(vars[i,], na.rm=TRUE)==0, NA, getRanks(vars[i,]))
+    n[i] <- ifelse(sum(vars[i,], na.rm=TRUE)==0, NA, length(sort(vars[i,])))
+    winnerValue[i] <- ifelse(sum(vars[i,], na.rm=TRUE)==0, NA, sort(vars[i,])[[n[i]]])
+    secondValue[i] <- ifelse(sum(vars[i,], na.rm=TRUE)==0, NA, sort(vars[i,], partial=n-1)[[n[i]-1]])
+    certainty[i] <- ifelse(sum(vars[i,], na.rm=TRUE)==0, NA, winnerValue[i] - secondValue[i])
+  }
+  df <- data.frame(winner)
+  colnames(df) <- c(paste0(varname,'Winner'))
+  data <- dplyr::bind_cols(data, df)
+  return(data)
 }
 
 # TODO: Rename function to something like relativeIndex
