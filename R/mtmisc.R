@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Mon Dec 28 19:53:51 2015
+# Last Modified : Mon Dec 28 19:59:56 2015
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -157,10 +157,6 @@ colnames(df) <- c(paste0(varname, 'RelativeParty', 1:dim(df)[2]))
 data <- dplyr::bind_cols(data, df)
 return(data)
 }
-
-df <- head(Data)
-varname <- 'voteCount'
-test <- getRelativeIndex(Data,varname)
 
 simpleLowercase<- function(text) {
   text <- iconv(text, to="ASCII//TRANSLIT//IGNORE")
