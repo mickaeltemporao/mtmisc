@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Mon Dec 28 19:59:56 2015
+# Last Modified : Sun Jan  3 09:05:09 2016
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -33,8 +33,10 @@ testSample <- function (data,by) {
 }
 
 getRanks <- function(x){
-  ranks <- rank(x, na.last='keep', ties.method = 'random' )
-  winner <- which(ranks == max(ranks, na.rm=TRUE))
+  ranks <- rank(x, na.last=F, ties.method = 'random' )
+  winner <- ifelse(sum(ranks, na.rm=T)>=0, 
+              which(ranks == max(ranks, na.rm=TRUE)),
+              sample(1:length(x),1))
   return(winner)
 }
 
@@ -137,12 +139,13 @@ getRatio <- function(data, varname, ...){
 
 getRelativeIndex <- function (data, varname, ...) {
   percent <- function (data) {
-    (data)/(sum(data,na.rm=T))
+    return(data/sum(data,na.rm=T))
   }
   ratio <- function(data){
-    (data)/(max(data, na.rm=T))
+    return(data/max(data, na.rm=T))
   }
-  FUN <- function (df) {
+  FUN <- function (data) {
+    df <- data
     df <- ratio(percent(df))
     nParties <- length(df)
     pWinner <- getRanks(df)
