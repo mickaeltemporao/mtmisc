@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Sun Jan  3 09:05:09 2016
+# Last Modified : Sun Jan  3 09:49:35 2016
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -33,10 +33,12 @@ testSample <- function (data,by) {
 }
 
 getRanks <- function(x){
-  ranks <- rank(x, na.last=F, ties.method = 'random' )
-  winner <- ifelse(sum(ranks, na.rm=T)>=0, 
-              which(ranks == max(ranks, na.rm=TRUE)),
-              sample(1:length(x),1))
+  if (all(is.na(x))) {
+    ranks <- rank(c(rep(0, length(x))), ties.method = 'random')
+  } else {
+    ranks <- rank(x, na.last='keep', ties.method = 'random')
+  }
+  winner <- which(ranks == max(ranks, na.rm=TRUE))
   return(winner)
 }
 
