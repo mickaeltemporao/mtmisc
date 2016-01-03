@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Sun Jan  3 09:49:35 2016
+# Last Modified : Sun Jan  3 10:48:06 2016
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -43,13 +43,8 @@ getRanks <- function(x){
 }
 
 getWinner <- function(data, varname){
-  FUN <- function(x){
-    ranks <- rank(x, na.last='keep', ties.method = 'random' )
-    winner <- which(ranks == max(ranks, na.rm=TRUE))
-    return(winner)
-  }
   df <- dplyr::select(data, starts_with(varname))
-  df <- apply_pb(df,1, FUN)
+  df <- apply_pb(df,1, getRanks)
   df <- as.data.frame(df)
   colnames(df) <- c(paste0('winner.',varname))
   df <- dplyr::bind_cols(data, df)
