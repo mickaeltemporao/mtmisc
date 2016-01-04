@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Mon Jan  4 07:48:08 2016
+# Last Modified : Mon Jan  4 08:24:18 2016
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -135,15 +135,9 @@ getRatio <- function(data, varname, ...){
 }
 
 getRelativeIndex <- function (data, varname, ...) {
-  percent <- function (data) {
-    return(data/sum(data,na.rm=T))
-  }
-  ratio <- function(data){
-    return(data/max(data, na.rm=T))
-  }
   FUN <- function (data) {
     df <- data
-    df <- ratio(percent(df))
+    df <- scales::rescale(df, c(-1,1))
     winner <- getRanks(df)
     df <- df - df[winner]
     df[winner] <- df[winner] - sort(df, decreasing = TRUE)[2]
