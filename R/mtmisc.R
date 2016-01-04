@@ -6,7 +6,7 @@
 # Description   : Mickael Temporão's Miscellaneous Functions
 # Created By    : Mickael Temporão
 # Creation Date : 18-12-2015
-# Last Modified : Sun Jan  3 10:48:06 2016
+# Last Modified : Mon Jan  4 07:48:08 2016
 # Contact       : mickael dot temporao dot 1 at ulaval dot ca
 # ===============================================================
 # Copyright (C) 2015 Mickael Temporão
@@ -144,10 +144,9 @@ getRelativeIndex <- function (data, varname, ...) {
   FUN <- function (data) {
     df <- data
     df <- ratio(percent(df))
-    nParties <- length(df)
-    pWinner <- getRanks(df)
-    df <- df - df[pWinner]
-    df[pWinner] <- df[pWinner] - sort(df, decreasing = TRUE)[2]
+    winner <- getRanks(df)
+    df <- df - df[winner]
+    df[winner] <- df[winner] - sort(df, decreasing = TRUE)[2]
     return(df)
   }  
 df <- dplyr::select(data, starts_with(varname))
