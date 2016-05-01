@@ -24,12 +24,30 @@ testSample <- function (data,by) {
 # Returns:
 #   A test sample data frame
   data <- as.data.frame(data)
-  Temp <- data[0,] 
+  Temp <- data[0,]
   for (i in unique(data[,by])){
     print(paste0('Sampling ', i,))
     Temp <- dplyr::union(Temp, head(data[data[,by] == i,]))
   }
   return(Temp)
+}
+
+apply_pb <- function(X, MARGIN, FUN, ...) {
+  env <- environment()
+  pb_Total <- sum(dim(X)[MARGIN])
+  counter <- 0
+  pb <- txtProgressBar(min = 0, max = pb_Total,
+                       style = 3)
+  wrapper <- function(...) {
+    curVal <- get("counter", envir = env)
+    assign("counter", curVal +1 ,envir= env)
+    setTxtProgressBar(get("pb", envir= env),
+                           curVal +1)
+    FUN(...)
+  }
+  res <- apply(X, MARGIN, wrapper, ...)
+  close(pb)
+  res
 }
 
 getRanks <- function(x){
@@ -49,26 +67,6 @@ getWinner <- function(data, varname){
   colnames(df) <- c(paste0('winner.',varname))
   df <- dplyr::bind_cols(data, df)
   return(df)
-}
-
-apply_pb <- function(X, MARGIN, FUN, ...)
-{
-  env <- environment()
-  pb_Total <- sum(dim(X)[MARGIN])
-  counter <- 0
-  pb <- txtProgressBar(min = 0, max = pb_Total,
-                       style = 3)
-  wrapper <- function(...)
-  {
-    curVal <- get("counter", envir = env)
-    assign("counter", curVal +1 ,envir= env)
-    setTxtProgressBar(get("pb", envir= env),
-                           curVal +1)
-    FUN(...)
-  }
-  res <- apply(X, MARGIN, wrapper, ...)
-  close(pb)
-  res
 }
 
 getBinary <- function (data, varname) {
@@ -142,7 +140,7 @@ getRelativeIndex <- function (data, varname, ...) {
     df <- df - df[winner]
     df[winner] <- df[winner] - sort(df, decreasing = TRUE)[2]
     return(df)
-  }  
+  }
 df <- dplyr::select(data, starts_with(varname))
 df <- t(apply_pb(df,1, FUN))
 df <- as.data.frame(df)
