@@ -1,18 +1,16 @@
 #!/usr/bin/env Rscript
-#-*- coding: utf-8 -*-
-
-# ===============================================================
-# File Name     : mtmisc.R
-# Description   : Mickael Temporão's Miscellaneous Functions
-# Created By    : Mickael Temporão
-# Creation Date : 18-12-2015
-# Last Modified : Mon Jan  4 08:24:18 2016
-# Contact       : mickael dot temporao dot 1 at ulaval dot ca
-# ===============================================================
-# Copyright (C) 2015 Mickael Temporão
-# GNU GENERAL PUBLIC LICENSE Version 2
-# http://www.gnu.org/licenses/gpl-2.0.txt
-# ===============================================================
+# ------------------------------------------------------------------------------
+# Title:        TODO: (add title)
+# Filename:     Test.R
+# Description:  TODO: (write me)
+# Version:      0.0.0.000
+# Created:      2015-12-18 12:07:32
+# Modified:     2016-06-09 15:09:25
+# Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
+# ------------------------------------------------------------------------------
+# Copyright (C) 2016 Mickael Temporão
+# Licensed under the GPL-2 < https://www.gnu.org/licenses/gpl-2.0.txt >
+# ------------------------------------------------------------------------------
 
 testSample <- function (data,by) {
 # Creates small samples to test functions
@@ -98,7 +96,7 @@ getRci <- function (data, varname) {
   return(df)
 }
 
-# TODO: Rename function to something like relativeIndex
+# TODO: Rename function to something more meaningful relativeIndex
 getRri <- function (data, varname) {
   winner <- NA
   winnerValue <- NA
@@ -155,22 +153,3 @@ simpleLowercase<- function(text) {
   text <- tolower(gsub( "\\.|/|\\-|\"|\\s" , "" , text))
   return(text)
 }
-
-
-# ===============================================================
-# Copyright (C) 2015 Mickael Temporão
-# GNU GENERAL PUBLIC LICENSE Version 2
-# ===============================================================
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
