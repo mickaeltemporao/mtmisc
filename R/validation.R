@@ -1,9 +1,16 @@
-#!/usr/bin/Rscript
-# AUTHOR:   Mickael Temporão
-# FILE:     validition.R
-# ROLE:     Check Validity of Twitter Accounts
-# CREATED:  2016-04-01 18:03:03
-# MODIFIED: 2016-05-05 10:46:36
+#!/usr/bin/env Rscript
+# ------------------------------------------------------------------------------
+# Title:        TODO: (add title)
+# Filename:     Test.R
+# Description:  TODO: (write me)
+# Version:      0.0.0.000
+# Created:      2016-04-01 18:03:03
+# Modified:     2016-06-09 15:06:17
+# Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
+# ------------------------------------------------------------------------------
+# Copyright (C) 2016 Mickael Temporão
+# Licensed under the GPL-2 < https://www.gnu.org/licenses/gpl-2.0.txt >
+# ------------------------------------------------------------------------------
 
 # TODO: bug while loop
 # TODO: add option to redo last
@@ -42,7 +49,7 @@ require(dplyr)
     return(prompt_user())
   } else if (input == 'q') {
         db1 <- db1 %>% bind_rows(db2)
-        write.csv(db1,paste0(file_path, file_name, '_ids_validity.csv'))
+        write.csv(db1,paste0(file_path, file_name, '_ids_validity.csv'), row.names=F)
         quit(save='no')
     }
   return(as.numeric(input))
