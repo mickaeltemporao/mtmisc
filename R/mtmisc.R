@@ -5,13 +5,13 @@
 # Description:  TODO: (write me)
 # Version:      0.0.0.000
 # Created:      2015-12-18 12:07:32
-# Modified:     2016-06-09 15:09:25
+# Modified:     2016-10-07 10:17:32
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
 # Licensed under the GPL-2 < https://www.gnu.org/licenses/gpl-2.0.txt >
 # ------------------------------------------------------------------------------
-
+#TODO: simplify outputs of functions
 testSample <- function (data,by) {
 # Creates small samples to test functions
 #
@@ -30,24 +30,6 @@ testSample <- function (data,by) {
   return(Temp)
 }
 
-apply_pb <- function(X, MARGIN, FUN, ...) {
-  env <- environment()
-  pb_Total <- sum(dim(X)[MARGIN])
-  counter <- 0
-  pb <- txtProgressBar(min = 0, max = pb_Total,
-                       style = 3)
-  wrapper <- function(...) {
-    curVal <- get("counter", envir = env)
-    assign("counter", curVal +1 ,envir= env)
-    setTxtProgressBar(get("pb", envir= env),
-                           curVal +1)
-    FUN(...)
-  }
-  res <- apply(X, MARGIN, wrapper, ...)
-  close(pb)
-  res
-}
-
 getRanks <- function(x){
   if (all(is.na(x))) {
     ranks <- rank(c(rep(0, length(x))), ties.method = 'random')
@@ -60,7 +42,7 @@ getRanks <- function(x){
 
 getWinner <- function(data, varname){
   df <- dplyr::select(data, starts_with(varname))
-  df <- apply_pb(df,1, getRanks)
+  df <- pbapply(df,1, getRanks)
   df <- as.data.frame(df)
   colnames(df) <- c(paste0('winner.',varname))
   df <- dplyr::bind_cols(data, df)
@@ -74,7 +56,7 @@ getBinary <- function (data, varname) {
     return(data)
   }
   df <- dplyr::select(data, starts_with(varname))
-  df <- t(apply_pb(df,1, FUN))
+  df <- t(pbapply(df,1, FUN))
   df <- as.data.frame(df)
   colnames(df) <- c(paste0(varname, 'BinaryParty', 1:dim(df)[2]))
   #data <- dplyr::bind_cols(data, df) # remove auto append to initial DF
@@ -89,7 +71,7 @@ getRci <- function (data, varname) {
     return(data)
   }
   df <- dplyr::select(data, starts_with(varname))
-  df <- t(apply_pb(df,1, FUN))
+  df <- t(pbapply(df,1, FUN))
   df <- as.data.frame(df)
   colnames(df) <- c(paste0(varname, 'RciParty', 1:dim(df)[2]))
   #data <- dplyr::bind_cols(data, df) # remove auto append to initial DF
@@ -140,7 +122,7 @@ getRelativeIndex <- function (data, varname, ...) {
     return(df)
   }
 df <- dplyr::select(data, starts_with(varname))
-df <- t(apply_pb(df,1, FUN))
+df <- t(pbapply(df,1, FUN))
 df <- as.data.frame(df)
 colnames(df) <- c(paste0(varname, 'RelativeParty', 1:dim(df)[2]))
 data <- dplyr::bind_cols(data, df)

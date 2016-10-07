@@ -10,4 +10,5 @@ Copyright: Mickael Temporão
 LazyData: true
 Imports:
     dplyr,
-    tidyr 
+    tidyr,
+    pbapply
