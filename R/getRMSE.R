@@ -1,20 +1,18 @@
 #!/usr/bin/env Rscript
 # ------------------------------------------------------------------------------
-# Title:        condenseVar
-# Filename:     condenseVar.R
-# Description:  Function to combine low frequency counts
+# Title:        TODO: (add title)
+# Filename:     getRMSE.R
+# Description:  TODO: (write me)
 # Version:      0.0.0.000
-# Created:      2016-11-08 12:19:35
-# Modified:     2016-11-08 14:11:56
+# Created:      2016-11-08 15:23:27
+# Modified:     2016-11-08 15:30:04
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
 # Licensed under the GPL-2 < https://www.gnu.org/licenses/gpl-2.0.txt >
 # ------------------------------------------------------------------------------
-#
-#http://stackoverflow.com/questions/34385340/combining-low-frequency-counts-in-r
-condenseVar <- function(vector, threshold = 0.02, new_name = "low_freq") {
-  to_condense <- names(which(prop.table(table(vector)) < threshold))
-  vector[vector %in% to_condense] <- new_name
-  vector
+getRMSE <- function (y, y_hat, decimals=2) {
+  rmse <- sqrt(mean((y - y_hat)^2))
+  rmse <- round(rmse, decimals)
+  return(rmse)
 }

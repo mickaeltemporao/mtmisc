@@ -5,7 +5,7 @@
 # Description:  Function to combine low frequency cols
 # Version:      0.0.0.001
 # Created:      2016-11-08 12:19:58
-# Modified:     2016-11-08 12:20:46
+# Modified:     2016-11-08 14:12:17
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
