@@ -9,6 +9,5 @@ Year: 2015
 Copyright: Mickael Temporão
 LazyData: true
 Imports:
-    dplyr,
-    tidyr,
+    tidyverse,
     pbapply
