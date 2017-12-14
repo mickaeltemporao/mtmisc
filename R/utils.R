@@ -10,20 +10,29 @@
 # ------------------------------------------------------------------------------
 
 #' @export
-substr_right <- function(x, n){
+#' importFrom digest digest
+anonymize <- function(x, algo = "crc32"){
+  unique_hashes <- vapply(unique(x), 
+                          function(object) digest(object, algo = algo), 
+                          FUN.VALUE = "", 
+                          USE.NAMES = TRUE)
+  unname(unique_hashes[x])
+}
+
+#' @export
+substr_right <- function (x, n) {
   substr(x, nchar(x)-n+1, nchar(x))
 }
 
 #' @export
-impute_median <- function(x){
+impute_median <- function (x) {
   ind_na <- is.na(x)
   x[ind_na] <- median(x[!ind_na])
   as.numeric(x)
 }
 
 #' @export
-range_01 <- function (x)
-{
+range_01 <- function (x) {
     (x - min(x, na.rm = TRUE))/(max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
 }
 
