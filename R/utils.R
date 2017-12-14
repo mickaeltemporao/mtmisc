@@ -1,14 +1,3 @@
-# Text File
-# ------------------------------------------------------------------------------
-# Filename:     utils.R
-# Created:      2017-12-07 09:56:49
-# Modified:     2017-12-07 09:56:49
-# Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
-# ------------------------------------------------------------------------------
-# Copyright (C) 2017 Mickael Temporão
-# Licensed under the MIT < https://opensource.org/licenses/MIT >
-# ------------------------------------------------------------------------------
-
 #' @export
 #' importFrom digest digest
 anonymize <- function(x, algo = "crc32"){
