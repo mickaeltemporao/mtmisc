@@ -1,9 +1,17 @@
+#' Checks if input is an email address
+#'
+#' @export
+is_email <- function (x) {
+  email_re <- "^[[:alnum:].-_]+@[[:alnum:].-]+$"
+  grepl(email_re, x, ignore.case = TRUE)
+}
+
 #' @export
 #' importFrom digest digest
 anonymize <- function(x, algo = "crc32"){
-  unique_hashes <- vapply(unique(x), 
-                          function(object) digest(object, algo = algo), 
-                          FUN.VALUE = "", 
+  unique_hashes <- vapply(unique(x),
+                          function(object) digest(object, algo = algo),
+                          FUN.VALUE = "",
                           USE.NAMES = TRUE)
   unname(unique_hashes[x])
 }
