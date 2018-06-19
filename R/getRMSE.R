@@ -17,7 +17,7 @@ getRMSE <- function (y, y_hat, decimals=2) {
   return(rmse)
 }
 
-getMAE <- function (y, y_hat, decimals) {
+getMAE <- function (y, y_hat, decimals=2) {
   mae <- mean(abs(y - y_hat), na.rm=T)
   mae <- round(mae, decimals)
   return(mae)
